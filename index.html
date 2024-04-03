@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>goit-js-hw-11</title>
-    
-    <script type="module" crossorigin src="/goit-js-hw-11/commonHelpers.js"></script>
-    <link rel="modulepreload" crossorigin href="/goit-js-hw-11/assets/vendor-5b791d57.js">
-    <link rel="stylesheet" href="/goit-js-hw-11/assets/vendor-cf6910df.css">
-    <link rel="stylesheet" href="/goit-js-hw-11/assets/index-594a01fa.css">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homework 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  
+    <script type="module" crossorigin src="/goit-js-hw-12/commonHelpers.js"></script>
+    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-550cebad.js">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/vendor-cf6910df.css">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-8e9f414a.css">
   </head>
-  <body>
-    <div class="preloader">
-      <div class="preloader__row">
-        <p>load</p>
-        <div class="preloader__item"></div>
-        <div class="preloader__item"></div>
-      </div>
-    </div>
-      <form class="form-inline">
-        <input
-            type="text"
-            class="form-control"
-            name="images"
-            placeholder="Search images..."/>
-        <button type="submit">Search</button>
-      </form>
-      <div
-          class="image-container"
-          style="justify-content: start">
-      <ul class="gallery"></ul>
-      </div>
+<body><div class="conteiner"></div>
+  <div class="search-bar">
+    <form class="form-inline">
+      <input type="text" placeholder="Search images..." id="search-input" />
+    <button type="submit" id="search-button">Search</button></form> 
+  </div>
+  <ul class="gallery"></ul><br>
+  <div class="loader visually-hidden" id="loader"></div>
+  <button type="button" id="load-button" class="visually-hidden">Load..more</button>
+</div>
   
-  
-  
-  </body>
+</body>
 </html>
