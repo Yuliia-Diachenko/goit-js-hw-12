@@ -1,72 +1,76 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { renderImgs } from './js/render-functions';
-import { fetchImg } from './js/pixabay-api';
+import { fetchImages } from './js/pixabay-api';
+import { renderImages } from './js/render-functions';
+export const galleryList = document.querySelector('ul.gallery');
+export let query = '';
+const inputQuery = document.querySelector('#search-input');
+export let page = 1;
+export let limit = 15;
+export const loadButton = document.querySelector('#load-button');
+export const loaderDiv = document.querySelector('#loader');
+inputQuery.addEventListener('input', e => {
+  query = inputQuery.value.trim();
+  galleryList.innerHTML = '';
+  loadButton.className = 'visually-hidden';
+  loaderDiv.className = 'visually-hidden';
+});
 
-export const setGallery = document.querySelector('ul.gallery');
-export let imgset;
-export let searchImgs;
-// =======================================
-const inputfield = document.querySelector('input');
-const inputBtn = document.querySelector('button');
-const fillForm = document.querySelector('form');
-const preloader = document.querySelector('.preloader');
-// ============  loader ==============
-const showLoader = () => {
-  preloader.style.display = 'flex';
-};
-const hideLoader = () => {
-  preloader.style.display = 'none';
-};
-const handleLoad = () => {
-  document.body.classList.add('loaded');
-  document.body.classList.remove('loaded_hiding');
-};
-
-window.onload = handleLoad;
-
-fillForm.addEventListener('submit', async event => {
+const searchForm = document.querySelector(".form-inline")
+searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-
-  searchImgs = inputfield.value.trim();
-
-  if (!searchImgs.length) {
-    iziToast.error({
-      color: 'yellow',
-      message: ` Please fill in the field for search query.`,
-      position: 'topRight',
-    });
-    setGallery.innerHTML = '';
-  }
-  
-  showLoader();
+  galleryList.innerHTML = '';
+  loaderDiv.className = 'loader';
+  page = 1;
+  limit = 15;
   try {
-
-    const images = await fetchImg();
-
-    imgset = images.hits;
-
-    if (!imgset.length) {
-      iziToast.error({
-        color: 'red',
-  
-        message: `❌ Sorry, there are no images matching your search query. Please try again!`,
-        position: 'topRight',
-      });
+    if (query) {
+      loadButton.className = '';
+      const posts = await fetchImages(query);
+      renderImages(posts);
+      loaderDiv.className = 'loader visually-hidden';
+      page += 1;
     }
-
-    renderImgs(images);
   } catch (error) {
+    loadButton.className = 'visually-hidden';
+    console.log(error);
     iziToast.error({
-      color: 'red',
-      message: `:x: Sorry, there was a mistake. Please try again!`,
+      title: 'Error',
+      message: `Виникла помилка під час завантаження зображень. Будь ласка, спробуйте пізніше.`,
       position: 'topRight',
     });
-  } finally {
-    hideLoader();
-    handleLoad();
   }
-  fillForm.reset();
+  searchForm.reset();
+});
+
+loadButton.addEventListener('click', async () => {
+  loaderDiv.className = 'loader';
+  try {
+    if (query) {
+      const posts = await fetchImages(query);
+      const totalItems = posts.totalHits;
+      const currentPageItems =
+        document.querySelectorAll('.gallery-item').length;
+      if (currentPageItems >= totalItems) {
+        loadButton.className = 'visually-hidden';
+        loaderDiv.className = 'visually-hidden';
+        return iziToast.error({
+          title: 'Error',
+          message: `We're sorry, but you've reached the end of search results.`,
+          position: 'topRight',
+        });
+      }
+      renderImages(posts);
+      loaderDiv.className = 'loader visually-hidden';
+      page += 1;
+    }
+  } catch (error) {
+    console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Виникла помилка під час завантаження зображень. Будь ласка, спробуйте пізніше.`,
+      position: 'topRight',
+    });
+  }
 });

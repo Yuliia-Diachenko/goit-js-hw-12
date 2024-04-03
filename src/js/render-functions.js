@@ -1,49 +1,52 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+import { galleryList, loadButton } from '../main';
 
-import { setGallery } from '../main';
-import { imgset } from '../main';
-
-export function renderImgs(images) {
-  setGallery.innerHTML = '';
-
-    const imgGallery = imgset
-    .map(image => 
-    `<li class="img-blok">
-        <a href="${image.largeImageURL}">
-        <img src="${image.webformatURL}"
-             data-source="${image.largeImageURL}"
-             alt="${image.tags}">   
-        <ul class="image-descript">
-            <li>
-                <h3>likes</h3>
-                <p>${image.likes}</p>
+export async function renderImages(data) {
+  // galleryList.innerHTML = '';
+  console.log(data);
+  const images = data.hits;
+  if (images.length == 0) {
+    loadButton.className = 'visually-hidden';
+    document.getElementsByClassName('loader')[0].className =
+      'loader visually-hidden';
+    iziToast.error({
+      title: 'Error',
+      message: `No such pictures`,
+      position: 'topRight',
+    });
+  }
+  const galleryMarkup = images
+    .map(image => {
+      return `<li class="gallery-item">
+        <a class="gallery-link" href="${image.largeImageURL}">
+          <img
+            class="gallery-image"            
+            src="${image.webformatURL}"
+            data-source="${image.largeImageURL}"
+            alt="${image.tags}"
+          />
+          <ul class="gallery-description">
+          <li><h3>Likes</h3><p>${image.likes}</p>
+          </li>
+          <li><h3>Views</h3><p>${image.views}</p>
             </li>
-            <li>
-                <h3>views</h3>
-                <p>${image.views}</p>
-            </li>
-            <li>
-                <h3>comments</h3>
-                <p>${image.comments}</p>
-            </li>
-            <li>
-                <h3>downloads</h3>
-                <p>${image.downloads}</p>
-            </li>
-        </ul>
+            <li><h3>Comments</h3><p>${image.comments}</p>
+              </li>
+              <li><h3>Downloads</h3><p>${image.downloads}</p>
+                </li>
+          </ul>
         </a>
-    </li>`
-    ).join('');
-
-    setGallery.insertAdjacentHTML('beforeend', imgGallery);
-
-    const lightbox = new SimpleLightbox('.gallery a', {
+      </li>`;
+    })
+    .join('');
+  galleryList.insertAdjacentHTML('beforeend', galleryMarkup);
+  const galleryCfg = {
     captionsData: 'alt',
-  });
-
+  };
+  let lightbox = new SimpleLightbox('.gallery a', galleryCfg);
+  lightbox.on('show.simplelightbox', function () {});
   lightbox.refresh();
 }
