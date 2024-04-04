@@ -10,18 +10,14 @@ export let page = 1;
 export let limit = 15;
 export const loadButton = document.querySelector('#load-button');
 export const loaderDiv = document.querySelector('#loader');
-inputQuery.addEventListener('input', e => {
-  query = inputQuery.value.trim();
-  galleryList.innerHTML = '';
-  loadButton.className = 'visually-hidden';
-  loaderDiv.className = 'visually-hidden';
-});
 
 const searchForm = document.querySelector(".form-inline")
 searchForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
+  event.preventDefault();  
+  query = inputQuery.value.trim();
   galleryList.innerHTML = '';
   loaderDiv.className = 'loader';
+  loadButton.className = 'visually-hidden';
   page = 1;
   limit = 15;
   try {
@@ -39,6 +35,7 @@ searchForm.addEventListener('submit', async (event) => {
       title: 'Error',
       message: `Виникла помилка під час завантаження зображень. Будь ласка, спробуйте пізніше.`,
       position: 'topRight',
+      
     });
   }
   searchForm.reset();
@@ -46,7 +43,7 @@ searchForm.addEventListener('submit', async (event) => {
 
 loadButton.addEventListener('click', async () => {
   loaderDiv.className = 'loader';
-  try {
+    try {
     if (query) {
       const posts = await fetchImages(query);
       const totalItems = posts.totalHits;
@@ -82,12 +79,10 @@ window.addEventListener('scroll', () => {
     scrollToTopBtn.style.display = 'none';
   }
 });
-
 function scrollToTop() {
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
   });
 }
-
 scrollToTopBtn.addEventListener('click', scrollToTop);
