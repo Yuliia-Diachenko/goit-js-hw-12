@@ -46,6 +46,5 @@ export async function renderImages(data) {
     })
     .join('');
   galleryList.insertAdjacentHTML('beforeend', galleryMarkup);
-
   lightbox.refresh();
 }

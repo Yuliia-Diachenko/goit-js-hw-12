@@ -1,6 +1,5 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 import { fetchImages } from './js/pixabay-api';
 import { renderImages } from './js/render-functions';
 export const galleryList = document.querySelector('ul.gallery');
@@ -40,16 +39,13 @@ searchForm.addEventListener('submit', async (event) => {
   }
   searchForm.reset();
 });
-
 loadButton.addEventListener('click', async () => {
   loaderDiv.className = 'loader';
     try {
     if (query) {
-      const posts = await fetchImages(query);
-      const totalItems = posts.totalHits;
-      const currentPageItems =
-        document.querySelectorAll('.gallery-item').length;
-      if (currentPageItems >= totalItems) {
+      const posts = await fetchImages(query);      
+      const totalPages = Math.ceil(100 / limit);      
+      if (page >= totalPages) {
         loadButton.className = 'visually-hidden';
         loaderDiv.className = 'visually-hidden';
         return iziToast.error({
@@ -86,3 +82,4 @@ function scrollToTop() {
   });
 }
 scrollToTopBtn.addEventListener('click', scrollToTop);
+
