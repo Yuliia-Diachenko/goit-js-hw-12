@@ -17,7 +17,7 @@ export async function renderImages(data) {
       'loader visually-hidden';
     iziToast.error({
       title: 'Error',
-      message: `No such pictures`,
+      message: `We're sorry, but you've reached the end of search results.`,
       position: 'topRight',
     });
   }
