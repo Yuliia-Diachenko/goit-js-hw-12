@@ -39,13 +39,14 @@ searchForm.addEventListener('submit', async (event) => {
   }
   searchForm.reset();
 });
+
 loadButton.addEventListener('click', async () => {
   loaderDiv.className = 'loader';
     try {
     if (query) {
-      const posts = await fetchImages(query);      
-      const totalPages = Math.ceil(100 / limit);      
-      if (page >= totalPages) {
+      const posts = await fetchImages(query);
+      const totalItems = posts.totalHits;   
+      if (page >= totalItems) {
         loadButton.className = 'visually-hidden';
         loaderDiv.className = 'visually-hidden';
         return iziToast.error({
@@ -82,4 +83,3 @@ function scrollToTop() {
   });
 }
 scrollToTopBtn.addEventListener('click', scrollToTop);
-

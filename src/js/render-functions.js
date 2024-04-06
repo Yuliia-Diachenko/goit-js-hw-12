@@ -2,7 +2,7 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import { galleryList, loadButton } from '../main';
+import { galleryList, loadButton, limit} from '../main';
 const galleryCfg = {
   captionsData: 'alt',
 };
@@ -11,7 +11,7 @@ lightbox.on('show.simplelightbox', function () {});
 export async function renderImages(data) {
   console.log(data);
   const images = data.hits;
-  if (images.length == 0) {
+  if (images.length == 0||images.length < limit) {
     loadButton.className = 'visually-hidden';
     document.getElementsByClassName('loader')[0].className =
       'loader visually-hidden';
@@ -46,5 +46,6 @@ export async function renderImages(data) {
     })
     .join('');
   galleryList.insertAdjacentHTML('beforeend', galleryMarkup);
+
   lightbox.refresh();
 }
